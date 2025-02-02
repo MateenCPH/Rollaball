@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     // Rigidbody of the player.
     private Rigidbody rb; 
     public TextMeshProUGUI countText;
+    public GameObject winText;
     
     // Score Count
     private int count;
@@ -25,10 +27,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         // Get and store the Rigidbody component attached to the player.
+        
         rb = GetComponent<Rigidbody>();
         count = 0;
         
         setCountText();
+        winText.SetActive(false);
     }
  
     // This function is called when a move input is detected.
@@ -44,6 +48,11 @@ public class PlayerController : MonoBehaviour
 
     void setCountText()
     {
+        if (count >= 2)
+        {
+            winText.SetActive(true);
+            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+        }
         countText.text = "Count: " + count.ToString();
     }
 
@@ -65,6 +74,16 @@ public class PlayerController : MonoBehaviour
             count = count + 1;
             
             setCountText();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+            winText.gameObject.SetActive(true);
+            winText.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         }
     }
 }
