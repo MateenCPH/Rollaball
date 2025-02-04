@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         count = 0;
         
-        setCountText();
+        SetCountText();
         winText.SetActive(false);
     }
  
@@ -46,9 +46,9 @@ public class PlayerController : MonoBehaviour
         movementY = movementVector.y; 
     }
 
-    void setCountText()
+    private void SetCountText()
     {
-        if (count >= 2)
+        if (count >= 10)
         {
             winText.SetActive(true);
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
@@ -66,14 +66,14 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(movement * speed); 
     }
     
-    void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other) 
     {
         if (other.gameObject.CompareTag("Collectible")) 
         {
             other.gameObject.SetActive(false);
             count = count + 1;
             
-            setCountText();
+            SetCountText();
         }
     }
 
